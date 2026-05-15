@@ -1,0 +1,28 @@
+/home/zerocool/My-co-Lab
+├── data
+│   ├── environment
+│   │   └── 2026-05-15_environment.csv
+│   └── usb_backup.log
+├── docs
+│   ├── automation_plan.md
+│   ├── project_tree.txt
+│   └── wiring.md
+├── photos
+├── pico_backup
+│   ├── grove_dht.py
+│   ├── grove_lcd.py
+│   ├── i2c_lcd.py
+│   ├── lcd_api.py
+│   └── main.py
+├── pico_libs
+├── README.md
+├── scripts
+│   ├── environment_logger.py
+│   ├── i2c_scan.py
+│   ├── lcd_message.sh
+│   ├── pico_main.py
+│   └── usb_backup.sh
+├── timelapse
+└── videos
+
+10 directories, 16 files
