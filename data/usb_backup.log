@@ -1,0 +1,109 @@
+USB detected: /dev/sda1 at Fri 15 May 14:09:13 BST 2026
+sending incremental file list
+./
+usb_backup.log
+environment/
+environment/2026-05-15_environment.csv
+
+sent 418 bytes  received 69 bytes  974.00 bytes/sec
+total size is 154  speedup is 0.32
+sending incremental file list
+./
+
+sent 46 bytes  received 19 bytes  130.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+./
+
+sent 46 bytes  received 19 bytes  130.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+./
+
+sent 46 bytes  received 19 bytes  130.00 bytes/sec
+total size is 0  speedup is 0.00
+USB detected: /dev/sda1 at Fri 15 May 14:10:07 BST 2026
+sending incremental file list
+./
+usb_backup.log
+environment/
+environment/2026-05-15_environment.csv
+
+sent 1,046 bytes  received 69 bytes  2,230.00 bytes/sec
+total size is 779  speedup is 0.70
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+USB detected: /dev/sda1 at Fri 15 May 14:17:52 BST 2026
+sending incremental file list
+./
+usb_backup.log
+environment/
+environment/2026-05-15_environment.csv
+
+sent 1,990 bytes  received 69 bytes  4,118.00 bytes/sec
+total size is 1,723  speedup is 0.84
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+USB detected: /dev/sda1 at Fri 15 May 14:18:31 BST 2026
+USB detected: /dev/sda1 at Fri 15 May 14:22:25 BST 2026
+sending incremental file list
+./
+usb_backup.log
+environment/
+environment/2026-05-15_environment.csv
+
+sent 2,260 bytes  received 69 bytes  4,658.00 bytes/sec
+total size is 1,996  speedup is 0.86
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  34.00 bytes/sec
+total size is 0  speedup is 0.00
+USB detected: /dev/sda1 at Fri 15 May 14:27:21 BST 2026
+sending incremental file list
+./
+usb_backup.log
+environment/
+environment/2026-05-15_environment.csv
+
+sent 3,101 bytes  received 69 bytes  6,340.00 bytes/sec
+total size is 2,833  speedup is 0.89
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
+sending incremental file list
+
+sent 39 bytes  received 12 bytes  102.00 bytes/sec
+total size is 0  speedup is 0.00
