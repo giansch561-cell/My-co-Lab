@@ -1,0 +1,5 @@
+data/environment/*.csv
+*.log
+__pycache__/
+*.pyc
+.vscode/
