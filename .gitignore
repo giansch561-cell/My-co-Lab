@@ -1,5 +1,26 @@
-data/environment/*.csv
-*.log
+# Python
 __pycache__/
 *.pyc
+
+# VS Code
 .vscode/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+
+# Logs
+*.log
+
+# Python virtual environments
+venv/
+.env/
+
+# Exports
+exports/
+
+# OS files
+.DS_Store

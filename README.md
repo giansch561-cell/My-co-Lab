@@ -1,37 +1,110 @@
 # My-co-Lab 🍄
 
-My-co-Lab is a DIY smart mushroom monitoring system built with Raspberry Pi and Raspberry Pi Pico.
-
-## Current Features
-
-- Temperature monitoring
-- Humidity monitoring
-- LCD dashboard
-- CSV logging
-- Automatic USB export
-- Local data cleanup after backup
-- Offline operation
-- Raspberry Pi + Pico architecture
-
-## Hardware
+Sistema modular de cultivo inteligente de cogumelos usando:
 
 - Raspberry Pi 4
 - Raspberry Pi Pico
-- Grove Shield for Pico
-- Grove Temperature & Humidity Sensor
-- Grove LCD
-- Grove Relay
-- USB Pen Drive
-- USB Hub
+- sensores
+- automação
+- timelapse
+- documentação
+- operação offline
 
-## Project Structure
+---
+
+## Filosofia
+
+Learn by building.
+
+Document everything.
+
+Improve continuously.
+
+---
+
+## Objetivo
+
+Criar um ecossistema modular de cultivo inteligente que combine:
+
+- cultivo
+- tecnologia
+- automação
+- documentação
+- conteúdo
+- produto futuro
+
+O objetivo não é dinheiro rápido.
+
+O objetivo é construir algo real, útil e sustentável.
+
+---
+
+## Estado atual
+
+### Core Prototype V0
+
+Funcional:
+
+- ✅ monitorização temperatura
+- ✅ monitorização humidade
+- ✅ LCD local
+- ✅ Pico → Pi serial
+- ✅ CSV logging
+- ✅ systemd
+- ✅ backup automático USB
+- ✅ GitHub
+- ✅ SSH
+- ✅ operação offline
+
+---
+
+## Módulos
+
+| Module | Estado |
+|---|---|
+| Core Prototype V0 | ✅ Active |
+| Fan Module | 🟡 Planning |
+| Humidity Module | ⚪ Planned |
+| Light Module | ⚪ Planned |
+| Camera Module | ⚪ Planned |
+| Timelapse Module | ⚪ Planned |
+
+---
+
+## Estrutura
 
 ```text
-My-co-Lab/
-├── scripts/
-├── pico_backup/
-├── data/
-├── docs/
-├── photos/
-├── videos/
-└── timelapse/
+docs/
+media/
+exports/
+project-files/
+```
+
+---
+
+## Documentação
+
+Ver:
+
+```text
+/docs
+```
+
+---
+
+## Hardware atual
+
+- Raspberry Pi 4
+- Raspberry Pi Pico
+- Grove Shield
+- DHT Sensor
+- Grove LCD
+- Relay
+- USB Hub
+- USB Backup
+
+---
+
+## Próxima fase
+
+Fan Module 🍃

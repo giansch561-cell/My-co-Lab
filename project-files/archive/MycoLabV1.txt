@@ -1,0 +1,1505 @@
+# My-co-Lab 🍄 — Documentação Técnica Completa
+
+Versão: 1.0
+Estado: Core Prototype V0
+Tipo de projeto: Sistema offline de monitorização e automação para cultivo de cogumelos
+Arquitetura atual: Raspberry Pi 4 + Raspberry Pi Pico
+
+---
+
+# 1. Objetivo deste documento
+
+Este documento descreve de forma organizada todo o desenvolvimento técnico inicial do My-co-Lab, desde a preparação do Raspberry Pi 4 até ao estado atual do sistema.
+
+Inclui:
+
+* contexto técnico do projeto
+* hardware utilizado
+* instalação e configuração do Raspberry Pi
+* estrutura de ficheiros
+* configuração do Raspberry Pi Pico
+* leitura de sensores
+* LCD
+* comunicação serial
+* logger CSV
+* serviço systemd
+* backup automático por USB
+* integração com GitHub
+* problemas encontrados
+* soluções aplicadas
+* estado atual
+* próximos passos
+
+Este documento deve funcionar como a memória técnica principal do projeto.
+
+---
+
+# 2. Visão técnica do projeto
+
+O My-co-Lab começou como um sistema pessoal de monitorização ambiental para cultivo de cogumelos, com o objetivo de evoluir para uma plataforma modular de cultivo inteligente.
+
+A primeira versão funcional tem como objetivo medir temperatura e humidade, mostrar informação localmente, guardar dados e permitir exportação offline.
+
+O sistema foi pensado para funcionar mesmo sem internet.
+
+Objetivos técnicos principais:
+
+* medir temperatura
+* medir humidade
+* mostrar dados num LCD
+* guardar dados em CSV
+* funcionar em modo headless
+* funcionar offline
+* exportar dados automaticamente para uma PEN USB
+* manter cópia do projeto em GitHub
+* preparar base futura para ventoinha, humidificador, LEDs, câmara e timelapse
+
+---
+
+# 3. Arquitetura geral atual
+
+Fluxo principal do sistema:
+
+```text
+Sensor Temperatura/Humidade
+        ↓
+Raspberry Pi Pico
+        ↓ serial USB
+Raspberry Pi 4
+        ↓
+CSV Logging
+        ↓
+Backup automático USB
+        ↓
+GitHub Backup
+```
+
+Distribuição de responsabilidades:
+
+## Raspberry Pi Pico
+
+Responsável por:
+
+* leitura do sensor
+* atualização do LCD
+* envio de dados por serial
+* futura lógica de automação local
+* futura ativação de relés
+
+## Raspberry Pi 4
+
+Responsável por:
+
+* receber dados do Pico
+* guardar CSV
+* correr serviços systemd
+* gerir backups USB
+* manter estrutura de ficheiros
+* sincronizar código com GitHub
+* futura gestão de câmara
+* futuro dashboard
+* futuro timelapse
+
+---
+
+# 4. Hardware utilizado
+
+## 4.1 Raspberry Pi 4
+
+Função:
+
+Computador principal do sistema.
+
+Responsabilidades:
+
+* executar Raspberry Pi OS
+* correr scripts Python
+* receber dados por serial
+* guardar ficheiros CSV
+* gerir serviços
+* exportar dados
+* manter repositório Git
+
+Estado atual:
+
+Ativo e funcional.
+
+---
+
+## 4.2 Raspberry Pi Pico
+
+Função:
+
+Microcontrolador responsável pela leitura de sensores e interface local.
+
+Responsabilidades:
+
+* ler sensor DHT
+* controlar LCD Grove
+* enviar dados ao Raspberry Pi 4 por serial
+* futura utilização para relé, ventoinha e humidificador
+
+Estado atual:
+
+Ativo e funcional.
+
+---
+
+## 4.3 Grove Shield for Pico
+
+Função:
+
+Facilitar ligações entre Raspberry Pi Pico e componentes Grove.
+
+Estado atual:
+
+Em utilização.
+
+---
+
+## 4.4 Grove Temperature/Humidity Sensor
+
+Função:
+
+Medição de temperatura e humidade.
+
+Ligação atual:
+
+```text
+DHT Sensor → GP16
+```
+
+Dados medidos:
+
+* temperatura
+* humidade relativa
+
+Estado atual:
+
+Funcional.
+
+---
+
+## 4.5 Grove LCD
+
+Função:
+
+Mostrar informação local do sistema.
+
+Ligação atual:
+
+```text
+LCD I2C → GP6 / GP7
+```
+
+Endereço I2C encontrado:
+
+```text
+[62]
+```
+
+Equivalente hexadecimal:
+
+```text
+0x3E
+```
+
+Exemplo de visualização:
+
+```text
+Temp: 23 C
+Hum: 63 %
+```
+
+Estado atual:
+
+Funcional.
+
+---
+
+## 4.6 Grove Relay
+
+Função:
+
+Preparado para futura automação.
+
+Possíveis usos:
+
+* ventoinha
+* humidificador
+* LEDs
+
+Estado atual:
+
+Ligado ao sistema, mas ainda não usado em produção.
+
+---
+
+## 4.7 USB Hub
+
+Função:
+
+Expansão de portas USB no Raspberry Pi.
+
+Usado para:
+
+* Pico
+* PEN USB
+* outros periféricos futuros
+
+---
+
+## 4.8 PEN USB
+
+Função:
+
+Exportação automática dos dados do projeto.
+
+Quando inserida, aciona o sistema de backup automático.
+
+---
+
+# 5. Instalação e configuração inicial do Raspberry Pi 4
+
+## 5.1 Sistema operativo
+
+Sistema utilizado:
+
+```text
+Raspberry Pi OS Lite
+```
+
+Motivos:
+
+* leve
+* adequado para sistema headless
+* baixo consumo de recursos
+* ideal para serviços e automação
+
+---
+
+## 5.2 Acesso remoto
+
+Configurações realizadas:
+
+* Wi-Fi
+* SSH
+* VS Code Remote SSH
+
+Objetivo:
+
+Permitir trabalhar no Raspberry Pi sem ecrã, teclado ou rato diretamente ligados.
+
+---
+
+## 5.3 Ambiente de desenvolvimento
+
+Ferramentas utilizadas:
+
+* Python 3
+* Git
+* mpremote
+* VS Code Remote SSH
+* systemd
+* udev
+* rsync
+
+---
+
+# 6. Estrutura principal do projeto
+
+Pasta principal criada:
+
+```text
+/home/pi/My-co-Lab/
+```
+
+Estrutura base atual:
+
+```text
+My-co-Lab/
+├── scripts/
+├── pico_libs/
+├── data/
+├── photos/
+├── videos/
+├── timelapse/
+└── docs/
+```
+
+Estrutura de dados ambientais:
+
+```text
+My-co-Lab/
+└── data/
+    └── environment/
+```
+
+Estrutura futura recomendada:
+
+```text
+My-co-Lab/
+├── pico/
+│   ├── main.py
+│   ├── grove_lcd.py
+│   ├── grove_dht.py
+│   ├── i2c_lcd.py
+│   └── lcd_api.py
+│
+├── raspberry/
+│   ├── logger/
+│   │   └── environment_logger.py
+│   │
+│   ├── backup/
+│   │   ├── usb_backup.sh
+│   │   └── lcd_message.sh
+│   │
+│   └── tools/
+│       └── i2c_scan.py
+│
+├── data/
+│   └── environment/
+│
+├── photos/
+├── videos/
+├── timelapse/
+├── docs/
+├── website/
+├── README.md
+├── CHANGELOG.md
+└── LICENSE
+```
+
+Nota:
+
+A estrutura inicial funcionou bem para prototipagem. A estrutura futura deve ser usada para preparar o projeto para crescimento, GitHub e documentação pública.
+
+---
+
+# 7. Configuração do Raspberry Pi Pico
+
+## 7.1 Instalação MicroPython
+
+O Raspberry Pi Pico foi configurado com MicroPython.
+
+Ferramenta utilizada:
+
+```bash
+mpremote
+```
+
+Comando de teste:
+
+```bash
+mpremote connect /dev/ttyACM0
+```
+
+Confirmação:
+
+```text
+MicroPython v1.25
+Raspberry Pi Pico
+```
+
+---
+
+## 7.2 Bibliotecas recuperadas/criadas no Pico
+
+Ficheiros usados no Pico:
+
+```text
+main.py
+grove_lcd.py
+grove_dht.py
+i2c_lcd.py
+lcd_api.py
+```
+
+Função de cada ficheiro:
+
+## main.py
+
+Programa principal do Pico.
+
+Responsável por:
+
+* inicializar sensor
+* inicializar LCD
+* ler temperatura
+* ler humidade
+* mostrar valores no LCD
+* enviar dados pela serial
+
+## grove_lcd.py
+
+Biblioteca para controlo do LCD Grove.
+
+## grove_dht.py
+
+Biblioteca para leitura do sensor DHT.
+
+## i2c_lcd.py
+
+Código auxiliar para comunicação I2C com LCD.
+
+## lcd_api.py
+
+Abstração/base para operações no LCD.
+
+---
+
+# 8. Sensor de temperatura e humidade
+
+## 8.1 Objetivo
+
+Testar a leitura de temperatura e humidade através do Raspberry Pi Pico.
+
+Ficheiro inicial criado:
+
+```text
+grove_sensor_test.py
+```
+
+Resultado de exemplo:
+
+```text
+Temperatura: 24 C
+Humidade: 57 %
+```
+
+Aprendizagens:
+
+* leitura de sensores com MicroPython
+* utilização de GPIO
+* testes básicos de hardware
+* validação de dados ambientais
+
+---
+
+# 9. LCD Grove
+
+## 9.1 Objetivo
+
+Mostrar dados ambientais localmente no LCD.
+
+Informação apresentada:
+
+```text
+Temp: XX C
+Hum: XX %
+```
+
+---
+
+## 9.2 Problemas encontrados
+
+Problemas iniciais:
+
+* erros I2C
+* endereço incorreto
+* erros EIO
+* controlador RGB não encontrado
+
+Erro observado:
+
+```text
+OSError: EIO
+```
+
+Ferramentas utilizadas para diagnóstico:
+
+```text
+i2c_scan.py
+lcd_probe.py
+```
+
+Endereço encontrado:
+
+```text
+[62]
+```
+
+---
+
+## 9.3 Solução
+
+Ações realizadas:
+
+* correr scan I2C
+* verificar cabo Grove
+* confirmar ligação em GP6/GP7
+* ajustar código para endereço correto
+
+Lição:
+
+Antes de assumir falha de código, confirmar sempre cabos, portas e endereço I2C.
+
+---
+
+# 10. Programa principal do Pico
+
+Ficheiro criado:
+
+```text
+pico_main.py
+```
+
+Depois instalado no Pico como:
+
+```text
+main.py
+```
+
+Funções principais:
+
+* ler sensor
+* atualizar LCD
+* enviar dados pela serial
+
+Fluxo:
+
+```text
+Sensor
+↓
+Pico
+↓
+LCD
+↓
+Serial
+↓
+Raspberry Pi
+```
+
+Formato serial:
+
+```text
+23,63
+```
+
+Onde:
+
+```text
+23 = temperatura em °C
+63 = humidade relativa em %
+```
+
+Intervalos usados:
+
+```text
+LCD: atualização regular
+Serial: envio periódico
+```
+
+Versão melhorada:
+
+```text
+LCD: cada 30 segundos
+Serial: cada 10 minutos
+```
+
+Objetivo da melhoria:
+
+* reduzir ruído visual no LCD
+* evitar envio excessivo de dados
+* tornar o sistema mais estável
+
+---
+
+# 11. Logger no Raspberry Pi
+
+## 11.1 Objetivo
+
+Receber os dados enviados pelo Pico e guardar em ficheiros CSV.
+
+Ficheiro criado:
+
+```text
+environment_logger.py
+```
+
+Responsabilidades:
+
+* abrir ligação serial
+* ler linhas enviadas pelo Pico
+* interpretar temperatura e humidade
+* adicionar timestamp
+* guardar em CSV
+
+Dispositivo serial:
+
+```text
+/dev/ttyACM0
+```
+
+---
+
+## 11.2 Formato CSV
+
+Formato:
+
+```text
+datetime,temperature_c,humidity_percent
+2026-05-12 05:09:11,23,63
+```
+
+Destino:
+
+```text
+/home/pi/My-co-Lab/data/environment/
+```
+
+---
+
+# 12. Serviço systemd do logger
+
+## 12.1 Objetivo
+
+Garantir que o logger inicia automaticamente quando o Raspberry Pi arranca.
+
+Serviço criado:
+
+```text
+mycolab-logger.service
+```
+
+Função:
+
+* iniciar logger automaticamente
+* manter recolha de dados contínua
+* permitir operação headless
+
+Comandos usados:
+
+```bash
+sudo systemctl enable mycolab-logger.service
+sudo systemctl start mycolab-logger.service
+sudo systemctl status mycolab-logger.service
+```
+
+Logs:
+
+```bash
+journalctl
+```
+
+ou:
+
+```bash
+journalctl -u mycolab-logger.service
+```
+
+Resultado:
+
+O sistema consegue iniciar o logger automaticamente após reboot.
+
+---
+
+# 13. Sistema de backup automático USB
+
+## 13.1 Objetivo
+
+Permitir exportar dados sem usar internet, dashboard ou acesso remoto.
+
+Quando uma PEN USB é inserida, o sistema deve:
+
+1. detetar USB
+2. parar o logger
+3. mostrar estado no LCD
+4. copiar dados
+5. copiar fotos
+6. copiar vídeos
+7. copiar timelapse
+8. apagar CSV locais
+9. desmontar USB
+10. reiniciar Pico
+11. reiniciar logger
+
+---
+
+## 13.2 Script principal
+
+Ficheiro criado:
+
+```text
+usb_backup.sh
+```
+
+Mais tarde movido para:
+
+```text
+/home/pi/My-co-Lab/scripts/production/usb_backup.sh
+```
+
+---
+
+## 13.3 Script de mensagens LCD
+
+Ficheiro criado:
+
+```text
+lcd_message.sh
+```
+
+Função:
+
+Enviar mensagens de estado para o LCD durante o backup.
+
+Exemplos:
+
+```text
+USB DETECTED
+Mounting...
+```
+
+```text
+COPYING
+Please wait
+```
+
+```text
+BACKUP DONE
+Remove USB
+```
+
+---
+
+## 13.4 Regra udev
+
+Regra criada:
+
+```text
+99-mycolab-usb-backup.rules
+```
+
+Função:
+
+Detetar inserção de USB e iniciar serviço de backup.
+
+---
+
+## 13.5 Serviço systemd template
+
+Serviço criado:
+
+```text
+mycolab-usb-backup@.service
+```
+
+Função:
+
+Executar o backup automático para o dispositivo USB detetado.
+
+---
+
+## 13.6 Fluxo completo do backup
+
+```text
+USB inserida
+↓
+USB DETECTED
+↓
+STOP LOGGER
+↓
+COPY FILES
+↓
+CLEAN LOCAL DATA
+↓
+UNMOUNT
+↓
+BACKUP DONE
+↓
+RESET PICO
+↓
+LOGGER START
+```
+
+---
+
+## 13.7 Estrutura exportada para a PEN
+
+```text
+My-co-Lab-Export/
+├── data/
+│   └── environment/
+├── photos/
+├── videos/
+└── timelapse/
+```
+
+---
+
+# 14. Problemas encontrados no backup USB
+
+## 14.1 USB inserida sem reação
+
+Investigação:
+
+```bash
+lsblk
+```
+
+Resultado observado:
+
+```text
+sda1
+/media/pi/E7E6-258B
+```
+
+A PEN estava correta.
+
+Depois foi procurado o script:
+
+```bash
+find ~/My-co-Lab -type f | grep -i backup
+```
+
+Descoberta:
+
+O script tinha sido movido para:
+
+```text
+/home/pi/My-co-Lab/scripts/production/usb_backup.sh
+```
+
+Mas o serviço ainda apontava para:
+
+```text
+/home/pi/My-co-Lab/scripts/usb_backup.sh
+```
+
+Problema:
+
+Path hardcoded desatualizado.
+
+Solução:
+
+Editar serviço:
+
+```bash
+sudo nano /etc/systemd/system/mycolab-usb-backup@.service
+```
+
+Substituir:
+
+```ini
+ExecStart=/home/pi/My-co-Lab/scripts/usb_backup.sh %I
+```
+
+por:
+
+```ini
+ExecStart=/home/pi/My-co-Lab/scripts/production/usb_backup.sh %I
+```
+
+Depois correr:
+
+```bash
+sudo systemctl daemon-reload
+```
+
+Lição:
+
+Sempre que scripts são movidos, atualizar serviços systemd associados.
+
+---
+
+# 15. Problemas gerais encontrados
+
+## 15.1 mpremote bloqueado
+
+Erro:
+
+```text
+/dev/ttyACM0 in use
+```
+
+Causa:
+
+O logger estava a usar a porta serial.
+
+Investigação:
+
+```bash
+sudo lsof /dev/ttyACM0
+```
+
+Solução:
+
+Parar o logger antes de usar mpremote.
+
+Exemplo:
+
+```bash
+sudo systemctl stop mycolab-logger.service
+python3 -m mpremote connect /dev/ttyACM0
+```
+
+Depois:
+
+```bash
+sudo systemctl start mycolab-logger.service
+```
+
+Lição:
+
+A porta serial só pode ser usada por um processo de cada vez.
+
+---
+
+## 15.2 LCD preso em BACKUP DONE
+
+Problema:
+
+Após backup, LCD ficava preso na mensagem:
+
+```text
+BACKUP DONE
+```
+
+Solução:
+
+Reiniciar Pico após backup.
+
+Comando:
+
+```bash
+python3 -m mpremote reset
+```
+
+Lição:
+
+Após operações externas no LCD/Pico, o sistema precisa de voltar ao estado normal.
+
+---
+
+## 15.3 CSV em pasta errada
+
+Problema:
+
+Ficheiros apareceram em:
+
+```text
+timelapse/environment/
+```
+
+em vez de:
+
+```text
+data/environment/
+```
+
+Solução:
+
+Corrigir comando rsync e estrutura de destino.
+
+Lição:
+
+A estrutura de pastas precisa ser consistente desde cedo.
+
+---
+
+## 15.4 Dados apagados localmente
+
+Objetivo:
+
+Depois do backup, limpar dados locais para evitar encher cartão SD.
+
+Verificação:
+
+```bash
+ls ~/My-co-Lab/data/environment
+```
+
+Lição:
+
+Limpeza automática é útil, mas só deve acontecer depois de confirmar que a cópia foi bem sucedida.
+
+---
+
+# 16. Falha do cartão SD
+
+## 16.1 Evento
+
+O cartão SD do Raspberry Pi falhou completamente.
+
+Sintomas:
+
+* SSH indisponível
+* VS Code Remote SSH não conectava
+* Raspberry Pi deixou de arrancar corretamente
+* timeouts de ligação
+* avisos de host verification
+
+Impacto:
+
+Parte dos scripts no Raspberry Pi foi perdida.
+
+---
+
+## 16.2 Recuperação
+
+Ações realizadas:
+
+* reinstalar Raspberry Pi OS
+* configurar Wi-Fi
+* configurar SSH
+* configurar VS Code Remote SSH
+* reinstalar Git
+* reinstalar mpremote
+* reinstalar dependências Python
+
+---
+
+## 16.3 Recuperação dos ficheiros do Pico
+
+Apesar da falha do SD, o Raspberry Pi Pico manteve os ficheiros na sua memória flash.
+
+Comando usado:
+
+```bash
+python3 -m mpremote fs ls
+```
+
+Ficheiros recuperados:
+
+```text
+main.py
+grove_lcd.py
+grove_dht.py
+i2c_lcd.py
+lcd_api.py
+```
+
+Criado backup:
+
+```text
+pico_backup/
+```
+
+Lição principal:
+
+A arquitetura distribuída aumentou a resiliência do projeto.
+
+Mesmo com falha do Raspberry Pi, parte importante do sistema sobreviveu no Pico.
+
+---
+
+# 17. Reconstrução do sistema
+
+Após a falha do SD, foram recriados:
+
+```text
+environment_logger.py
+mycolab-logger.service
+usb_backup.sh
+lcd_message.sh
+udev rules
+```
+
+Testes realizados novamente:
+
+* LCD
+* USB
+* CSV
+* serial
+* logger
+* serviços
+
+Resultado:
+
+Sistema restaurado e funcional.
+
+---
+
+# 18. Git e GitHub
+
+## 18.1 Objetivo
+
+Proteger o projeto contra futuras perdas e preparar desenvolvimento organizado.
+
+Ações realizadas:
+
+```bash
+git init
+```
+
+Configurado:
+
+* username
+* email
+* branch main
+* repositório GitHub
+* token authentication
+* credential helper
+
+Comandos usados:
+
+```bash
+git push
+```
+
+Resultado:
+
+Projeto sincronizado com GitHub.
+
+Arquitetura de backup:
+
+```text
+Raspberry Pi
+↓
+Git
+↓
+GitHub
+```
+
+Lição:
+
+Código e documentação devem estar sempre versionados.
+
+---
+
+# 19. Estado atual do sistema
+
+## Funcional
+
+```text
+✅ Temperature monitoring
+✅ Humidity monitoring
+✅ LCD display
+✅ Pico serial communication
+✅ CSV logging
+✅ systemd logger service
+✅ Automatic USB backup
+✅ LCD backup status messages
+✅ Automatic USB unmount
+✅ Logger restart after backup
+✅ GitHub backup
+✅ SSH access
+✅ VS Code Remote SSH
+✅ Offline operation
+✅ Relay installed
+```
+
+## Ainda pendente
+
+```text
+⬜ Fan
+⬜ Humidifier
+⬜ LED lighting
+⬜ Camera
+⬜ Timelapse
+⬜ First mushroom cultivation
+⬜ Dashboard
+⬜ Public website
+```
+
+---
+
+# 20. Produto atual definido
+
+Nome técnico atual:
+
+```text
+My-co-Lab Core Prototype V0
+```
+
+Descrição:
+
+Sistema offline de monitorização ambiental com logging, LCD, backup automático USB e sincronização GitHub.
+
+Estado:
+
+Protótipo funcional de monitorização.
+
+Ainda não é sistema completo de cultivo automatizado.
+
+---
+
+# 21. Futuro sistema modular
+
+Direção de produto:
+
+```text
+My-co-Lab Core
++
+Módulos
+```
+
+Módulos futuros:
+
+## Fan Module
+
+Função:
+
+Controlar ventilação e renovação de ar.
+
+## Humidity Module
+
+Função:
+
+Controlar humidificador.
+
+## Light Module
+
+Função:
+
+Controlar iluminação.
+
+## Camera Module
+
+Função:
+
+Criar fotos e timelapses.
+
+## Data Module
+
+Função:
+
+Melhorar histórico, CSV, SQLite e exportação.
+
+## Dashboard Module
+
+Função:
+
+Visualização web de dados e estado do sistema.
+
+---
+
+# 22. Roadmap técnico imediato
+
+## Fase A — Consolidação
+
+Objetivo:
+
+Organizar o Core Prototype V0.
+
+Tarefas:
+
+```text
+□ limpar estrutura de ficheiros
+□ organizar scripts por função
+□ criar README.md
+□ criar documentação técnica
+□ atualizar GitHub
+□ documentar arquitetura
+□ documentar estado atual
+```
+
+---
+
+## Fase B — Fan Module
+
+Objetivo:
+
+Adicionar primeira automação física.
+
+Tarefas:
+
+```text
+□ receber ventoinha
+□ confirmar tensão/alimentação
+□ testar relay manualmente
+□ ligar ventoinha ao relay
+□ criar lógica simples ON/OFF
+□ documentar circuito
+□ documentar código
+```
+
+Exemplo de lógica futura:
+
+```text
+IF temperature > threshold:
+    Fan ON
+
+IF temperature < threshold:
+    Fan OFF
+```
+
+---
+
+## Fase C — Humidity Module
+
+Objetivo:
+
+Automatizar humidade.
+
+Tarefas:
+
+```text
+□ receber humidificador
+□ testar relay
+□ definir limites de humidade
+□ testar estabilidade
+□ guardar dados
+□ documentar resultados
+```
+
+Exemplo:
+
+```text
+IF humidity < 85:
+    Humidifier ON
+
+IF humidity > 92:
+    Humidifier OFF
+```
+
+---
+
+## Fase D — Primeiro cultivo
+
+Espécie sugerida:
+
+```text
+Pleurotus ostreatus
+```
+
+Objetivo:
+
+Validar sistema em cultivo real.
+
+Tarefas:
+
+```text
+□ preparar growbox
+□ colocar bloco
+□ medir condições
+□ fotografar diariamente
+□ analisar dados
+□ documentar problemas
+```
+
+---
+
+## Fase E — Timelapse
+
+Objetivo:
+
+Criar assinatura visual do My-co-Lab.
+
+Tarefas:
+
+```text
+□ instalar câmara
+□ configurar captura automática
+□ guardar imagens
+□ gerar vídeo diário
+□ criar primeiro timelapse
+```
+
+---
+
+# 23. Regras de desenvolvimento do projeto
+
+## Regra 1
+
+Não reconstruir tudo sem necessidade.
+
+O sistema atual já funciona e deve ser evoluído progressivamente.
+
+## Regra 2
+
+Trabalhar apenas em:
+
+```text
+1 tarefa hardware
+1 tarefa software
+1 tarefa documentação
+```
+
+de cada vez.
+
+## Regra 3
+
+Cada módulo deve ser:
+
+```text
+construído
+↓
+testado
+↓
+documentado
+↓
+usado
+↓
+melhorado
+```
+
+## Regra 4
+
+Documentar falhas.
+
+As falhas são parte essencial da aprendizagem e do conteúdo do My-co-Lab.
+
+## Regra 5
+
+Produto final ainda não está definido.
+
+O objetivo atual é descobrir, através de uso real, o que as pessoas valorizam.
+
+---
+
+# 24. Conteúdo e comunicação
+
+O conteúdo deve nascer do processo real.
+
+Possíveis artigos:
+
+* Como construí um sistema offline de monitorização para cogumelos
+* Porque uso Raspberry Pi + Pico
+* Como uma falha de cartão SD quase destruiu o projeto
+* Como recuperei ficheiros do Pico
+* Como funciona o backup automático USB
+* Primeiro módulo automático do My-co-Lab
+
+Possíveis vídeos:
+
+* Building My-co-Lab Core Prototype V0
+* First LCD working
+* Automatic USB backup test
+* My Raspberry Pi failed
+* Preparing for the first grow
+
+---
+
+# 25. Conclusão técnica
+
+O My-co-Lab já não é apenas uma ideia.
+
+O projeto possui:
+
+* arquitetura funcional
+* leitura de sensores
+* LCD operacional
+* logging automático
+* backup USB
+* integração GitHub
+* experiência real de falha e recuperação
+* documentação inicial
+* roadmap modular
+
+O próximo passo não é começar de novo.
+
+O próximo passo é consolidar o Core Prototype V0 e adicionar o primeiro módulo real.
+
+---
+
+# 26. Próxima ação recomendada
+
+Antes de qualquer novo desenvolvimento:
+
+```text
+1. organizar estrutura de ficheiros
+2. confirmar que GitHub está atualizado
+3. criar README.md
+4. guardar esta documentação em docs/private/
+5. preparar documento Fan_Module.md
+```
+
+Depois disso, avançar para:
+
+```text
+Fan Module
+```
+
+Este será o primeiro passo em que o My-co-Lab deixa de ser apenas monitorização e passa a agir fisicamente sobre o ambiente.
