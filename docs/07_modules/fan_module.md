@@ -87,3 +87,103 @@ Testes planeados:
 - relay ON/OFF
 - controlo Pico
 - estabilidade contínua
+
+## Função prevista
+
+Objetivo principal:
+
+Criar circulação de ar no sistema.
+
+Não utilizado inicialmente para:
+
+- arrefecimento
+- controlo de temperatura
+- exaustão avançada
+
+Objetivos iniciais:
+
+- reduzir ar parado
+- melhorar troca gasosa
+- preparar futuras automatizações
+
+Primeira lógica:
+
+Fan
+
+↓
+
+Relay
+
+↓
+
+Pico
+
+↓
+
+ON / OFF
+
+## Lógica inicial
+
+Versão V0:
+
+Fan:
+
+OFF
+
+↓
+
+Tempo definido
+
+↓
+
+ON durante alguns segundos
+
+↓
+
+OFF
+
+Objetivo:
+
+Criar movimento de ar simples.
+
+Sem:
+
+- PID
+- curvas
+- controlo avançado
+- IA
+- decisões automáticas complexas
+
+Regra:
+
+Começar simples.
+
+## Integração prevista
+
+Ligação inicial:
+
+USB Fan
+
+↓
+
+Relay
+
+↓
+
+Raspberry Pi Pico
+
+↓
+
+Automação futura
+
+Estado atual:
+
+Planeado
+
+Estado hardware:
+
+A aguardar chegada da ventoinha
+
+Nota:
+
+Primeira versão apenas ON/OFF.

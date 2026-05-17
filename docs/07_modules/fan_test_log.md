@@ -53,3 +53,37 @@ Problemas encontrados:
 ---
 
 Lições aprendidas:
+
+# Fan Test Plan
+
+## Teste 001
+
+Objetivo:
+
+Confirmar funcionamento físico da ventoinha.
+
+---
+
+Verificações:
+
+- liga
+- desliga
+- ruído
+- vibração
+- fluxo de ar
+- alimentação USB
+
+---
+
+Resultado:
+
+Pendente
+
+---
+
+Observações:
+
+---
+
+Melhorias:
+
