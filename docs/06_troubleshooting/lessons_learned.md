@@ -113,3 +113,26 @@ Solução
 ↓
 
 Lição
+
+## Serial device stability
+
+Problema observado:
+
+Dispositivos USB podem mudar:
+
+```text
+/dev/ttyACM0
+/dev/ttyACM1
+```
+
+Descoberta:
+
+Existe identificador persistente:
+
+```text
+/dev/serial/by-id/usb-MicroPython_Board_in_FS_mode_e6604430430e6a28-if00
+```
+
+Possível melhoria futura:
+
+Substituir referências diretas a ttyACM0 por by-id para maior estabilidade.

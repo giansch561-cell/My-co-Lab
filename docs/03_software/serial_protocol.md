@@ -52,7 +52,7 @@ CSV
 
 ---
 
-## Intervalos atuais
+## Intervalos atuais observados
 
 LCD:
 
@@ -60,24 +60,50 @@ LCD:
 Atualização regular
 ```
 
-Serial:
+Serial / CSV:
 
 ```text
-envio periódico
+Aproximadamente a cada 30 segundos
 ```
 
-Versão melhorada:
+---
+
+## Nota técnica
+
+No Raspberry Pi logger existe:
+
+```python
+time.sleep(5)
+```
+
+No entanto, este valor não parece definir diretamente a frequência final do CSV.
+
+Durante os testes do Core Validation Sprint observou-se:
 
 ```text
-LCD → 30 segundos
-
-Serial → 10 minutos
+09:57:28
+09:57:59
+09:58:29
+09:59:00
 ```
 
-Objetivos:
+Intervalo aproximado:
 
-- reduzir ruído visual
-- evitar dados excessivos
+```text
+~30 segundos
+```
+
+Isto sugere que o intervalo principal poderá estar definido no firmware do Raspberry Pi Pico.
+
+---
+
+## Melhoria futura
+
+Confirmar onde o intervalo real é definido:
+
+- Pico
+- LCD
+- Logger
 - melhorar estabilidade
 
 ---
