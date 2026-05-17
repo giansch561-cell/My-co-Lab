@@ -1,5 +1,9 @@
 # My-co-Lab 🍄
+## Current Prototype
 
+![Raspberry Pi 4](media/photos/setup/04_raspberry_pi4.jpg)
+
+![LCD](media/photos/setup/03_lcd_display.jpg)
 Sistema modular de cultivo inteligente de cogumelos usando:
 
 - Raspberry Pi 4
