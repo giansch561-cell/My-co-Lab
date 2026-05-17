@@ -322,3 +322,63 @@ Testar primeiro.
 
 Ajustar depois.
 
+## Critérios de sucesso
+
+Fan Module considerado funcional quando:
+
+- ventoinha liga corretamente
+- ventoinha desliga corretamente
+- relay responde
+- Pico controla estado
+- fluxo de ar visível
+- sem vibração excessiva
+- sem falhas após funcionamento contínuo
+
+---
+
+Estado:
+
+Pendente
+
+## Dependências
+
+Hardware:
+
+- USB Cooling Fan
+- Relay
+- Raspberry Pi Pico
+- USB alimentação
+
+Software:
+
+- Pico firmware
+- serial communication
+- logger system
+
+Documentação relacionada:
+
+- fan_test_log.md
+- hardware_inventory.md
+- project_status.md
+
+## Estado atual
+
+Planeamento:
+
+Concluído ✅
+
+Hardware:
+
+Ventoinha encomendada
+
+Integração:
+
+Pendente
+
+Testes:
+
+Pendentes
+
+Próxima etapa:
+
+Receber hardware e iniciar Teste 001
