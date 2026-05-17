@@ -187,3 +187,138 @@ A aguardar chegada da ventoinha
 Nota:
 
 Primeira versão apenas ON/OFF.
+
+## Fluxo de ar inicial
+
+Primeira hipótese:
+
+Entrada passiva de ar
+
+↓
+
+circulação interna
+
+↓
+
+saída passiva
+
+Objetivo:
+
+Evitar ar parado.
+
+Não criar vento forte diretamente sobre os cogumelos.
+
+Observações futuras:
+
+- testar posição da ventoinha
+- testar intensidade
+- observar humidade
+- observar condensação
+
+Regra:
+
+Movimento suave > fluxo forte
+
+## Posições possíveis
+
+Hipótese A:
+
+Ventoinha lateral
+
+↓
+
+circulação horizontal
+
+---
+
+Hipótese B:
+
+Ventoinha superior
+
+↓
+
+movimento descendente
+
+---
+
+Hipótese C:
+
+Ventoinha inferior
+
+↓
+
+movimento ascendente
+
+---
+
+Estado:
+
+Não decidido
+
+Decisão futura baseada em:
+
+- condensação
+- humidade
+- espaço disponível
+- observação real
+
+## Posições possíveis
+
+Hipótese A:
+
+Ventoinha lateral
+
+↓
+
+circulação horizontal
+
+---
+
+Hipótese B:
+
+Ventoinha superior
+
+↓
+
+movimento descendente
+
+---
+
+Hipótese C:
+
+Ventoinha inferior
+
+↓
+
+movimento ascendente
+
+---
+
+Estado:
+
+Não decidido
+
+Decisão futura baseada em:
+
+- condensação
+- humidade
+- espaço disponível
+- observação real
+
+## Riscos observados
+
+Possíveis riscos:
+
+- fluxo demasiado forte
+- perda de humidade
+- vibração
+- ruído
+- cabo USB curto
+- interferência com outros módulos
+
+Estratégia:
+
+Testar primeiro.
+
+Ajustar depois.
+
