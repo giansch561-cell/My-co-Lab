@@ -136,3 +136,27 @@ Existe identificador persistente:
 Possível melhoria futura:
 
 Substituir referências diretas a ttyACM0 por by-id para maior estabilidade.
+
+## Persistent serial path
+
+Alteração aplicada:
+
+Substituído:
+
+```text
+/dev/ttyACM0
+```
+
+por:
+
+```text
+/dev/serial/by-id/usb-MicroPython_Board_in_FS_mode_e6604430430e6a28-if00
+```
+
+Motivo:
+
+Maior estabilidade e menor risco de conflitos USB.
+
+Resultado:
+
+Validação concluída com sucesso.
