@@ -160,3 +160,69 @@ Maior estabilidade e menor risco de conflitos USB.
 Resultado:
 
 Validação concluída com sucesso.
+
+## Lição 7
+
+Hardware novo deve ser testado isoladamente.
+
+Problema:
+
+DHT22 foi ligado incorretamente durante teste inicial.
+
+Resultado:
+
+- sensor aqueceu
+- leituras inválidas
+- debug adicional necessário
+
+Investigação:
+
+Após recuperação:
+
+- sensor deixou de aquecer
+- comunicação parcial existiu
+- valores permaneceram inconsistentes
+
+Solução:
+
+Voltar ao Core estável:
+
+DHT11
+↓
+LCD
+↓
+Serial
+↓
+CSV
+
+Lição:
+
+Não substituir componentes validados antes de confirmar:
+
+ligação
+↓
+GPIO
+↓
+alimentação
+↓
+Teste 001 isolado
+
+---
+
+## Lição 8
+
+Objetivo grande não substitui pequenas vitórias.
+
+Descoberta:
+
+Esperar apenas pela meta final cria sensação falsa de pouco progresso.
+
+Nova regra:
+
+1 hora máxima
+↓
+objetivo claro
+↓
+parar ao concluir
+↓
+mover pendente para amanhã

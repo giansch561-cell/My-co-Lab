@@ -14,10 +14,12 @@ Validated ✅
 - Raspberry Pi Pico
 - Grove Shield
 - Grove LCD
-- DHT Sensor
+- DHT11 Sensor
 - Relay
 - USB Hub
 - USB Memory Stick
+- USB RGB LED Strip (Tested)
+- Raspberry Pi Camera v3 NoIR 12MP 120° (Received, adapter pending)
 
 ---
 
@@ -30,16 +32,19 @@ Validated ✅
 
 ---
 
-## Módulos
+Core: ✅ Stable
 
-Core: ✅
+Fan: 🟡 Waiting for hardware
 
-Fan: 🟡 Planning
+Light: 🟢 Hardware tested manually
+
+Camera: 🟡 Received, adapter pending
 
 Humidity: ⏳ Future
 
-Timelapse: ⏳ Future
+DHT22: ⏸️ Tested, paused
 
+Timelapse: ⏳ Future
 ---
 
 ## Sistema
