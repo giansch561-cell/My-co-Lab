@@ -24,3 +24,14 @@ exports/
 
 # OS files
 .DS_Store
+
+# My-co-Lab generated data
+data/environment/*.csv
+data/usb_backup.log
+
+# Camera output
+media/photos/
+media/videos/
+
+# Temporary backups
+scripts/usb_backup.sh.bak
