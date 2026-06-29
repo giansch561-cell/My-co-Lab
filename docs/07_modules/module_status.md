@@ -3,11 +3,11 @@
 | Module | Estado |
 |---|---|
 | Core Prototype V0 | ✅ Active |
-| Fan Module | 🟡 Planning |
-| Humidity Module | ⚪ Planned |
+| Fan Module | 🟡 Hardware Ready |
+| Humidity Module | 🟡 Hardware Ready |
+| Camera Module | 🟢 Ready |
+| Timelapse Module | 🟡 Foundation Ready |
 | Light Module | ⚪ Planned |
-| Camera Module | ⚪ Planned |
-| Timelapse Module | ⚪ Planned |
 | Dashboard Module | ⚪ Planned |
 
 ---
@@ -16,7 +16,7 @@ Legenda:
 
 ⚪ Planned
 
-🟡 Planning
+🟡 Hardware Ready / Foundation Ready
 
 🔵 Testing
 
